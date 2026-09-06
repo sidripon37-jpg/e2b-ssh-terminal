@@ -1,21 +1,21 @@
-# E2B SSH Terminal by sidripon37
+# E2B SSH Terminal & Cloud Shell KeepAlive by sidripon37
 
-Fast, reliable cloud sandbox terminal powered by E2B.
+Fast, reliable cloud sandbox terminal & 24/7 Cloud Shell keep-alive bot.
 
-## Installation & Run (Google Cloud Shell / Termux / Linux)
+## 🚀 Quick Start (1-Click Run)
 
 ```bash
 git clone https://github.com/sidripon37-jpg/e2b-ssh-terminal.git
 cd e2b-ssh-terminal
 pip3 install -r requirements.txt
+```
+
+### 1. Launch E2B Cloud VPS / SSH Terminal:
+```bash
 python3 run.py
 ```
 
-## Features
-- Instant Linux Cloud Sandbox (Micro-VM)
-- Full interactive shell terminal
-- Built-in file explorer (`files`)
-- File reader (`cat <file>`)
-- Upload & Download tools (`upload`, `download`)
-- Multi-line Python execution (`py`)
-- Auto-timeout refresh (keeps alive while in use)
+### 2. Launch 24/7 Cloudflare Keep-Alive Bot (Keeps Google Cloud Shell Awake):
+```bash
+python3 keepalive.py
+```
