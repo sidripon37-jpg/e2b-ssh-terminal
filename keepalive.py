@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """
 Cloudflare 24/7 Official Keep-Alive Bot for Google Cloud Shell
-Powered by Cloudflare Zero Trust Tunnel
 by sidripon37
 """
 
@@ -9,23 +8,25 @@ import os
 import sys
 import time
 import subprocess
-import threading
-import urllib.request
+import shutil
 from pathlib import Path
 
 CF_TOKEN = "eyJhIjoiYjU2OGRhYTM1Y2YxOWQ3OTE2M2VjYTU1NzdkZGU5ODUiLCJ0IjoiZGUzOTYxMzEtM2FhZi00NWFlLWE4MTAtZmJlYTZmZDhlNTJjIiwicyI6Ik1UZGlNRE5pT1dRdE1qbGxaaTAwWW1ObExUaGtNekV0TXpSaE9HRTBZVGt5WVdWaSJ9"
-CLOUDFLARED_BIN = Path.home() / ".cloudflared_bin" / "cloudflared"
+BIN_DIR = Path.home() / ".cloudflared_bin"
+CLOUDFLARED_BIN = BIN_DIR / "cloudflared"
 
 def ensure_cloudflared():
+    which_bin = shutil.which("cloudflared")
+    if which_bin:
+        return which_bin
     if CLOUDFLARED_BIN.exists() and os.access(CLOUDFLARED_BIN, os.X_OK):
         return str(CLOUDFLARED_BIN)
     
-    print("[*] Downloading official Cloudflare tunnel binary...")
-    CLOUDFLARED_BIN.parent.mkdir(parents=True, exist_ok=True)
-    url = "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64"
-    urllib.request.urlretrieve(url, str(CLOUDFLARED_BIN))
+    print("[*] Installing official Cloudflare tunnel binary...")
+    BIN_DIR.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["curl", "-sL", "-o", str(CLOUDFLARED_BIN), "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64"], check=True)
     CLOUDFLARED_BIN.chmod(0o755)
-    print("[✓] Cloudflare binary installed.")
+    print("[✓] Cloudflare binary ready.")
     return str(CLOUDFLARED_BIN)
 
 def main():
@@ -35,8 +36,7 @@ def main():
     print("=" * 65)
     
     bin_path = ensure_cloudflared()
-    
-    print("[*] Connecting your official Cloudflare Tunnel...")
+    print("[*] Starting Cloudflare Tunnel with your official Token...")
     cmd = [bin_path, "tunnel", "run", "--token", CF_TOKEN]
     
     proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True)
