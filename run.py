@@ -180,7 +180,7 @@ def run_command(sb: Any, command: str, cwd: str, timeout: int = 300) -> Tuple[st
         f"cd {safe_cwd} 2>/dev/null || cd /home/user 2>/dev/null || cd /\n"
         f"{command}\n"
         f"__e2b_ssh_code=$?\n"
-        f"printf '\\n{marker}:%s\\n' "$PWD"\n"
+        f"printf '\n{marker}:%s\n' \"$PWD\"\n"
         f"exit $__e2b_ssh_code\n"
     )
     stdout, stderr, code = "", "", 0
